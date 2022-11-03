@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NftDemo</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+  </head>
+
+  <body>
+  <% if current_user.present?  %>
+    <div class="grid grid-cols-6 gap-1">
+      <div class="bg-green-800 h-max">
+        <%= render :partial => "shared/side_nav" if current_user.present? %>
+      </div>
+      <!-- ... -->
+      <div class="col-span-5">
+        <%= render :partial => "shared/flash", :locals => {:notice => notice, :alert => alert} %>
+        <div class="min-h-full">
+          <header class="bg-white shadow">
+            <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+              <h1 class="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+            </div>
+          </header>
+          <main>
+            <div class="mx-auto max-w-7xl py-3 sm:px-3 lg:px-4">
+              <%= yield %>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="grid grid-cols-6 gap-1">
+      <div></div>
+      <div class="col-span-4">
+        <%= yield %>
+      </div>
+      <div></div>
+    </div>
+  <% end %>
+  </body>
+</html>
